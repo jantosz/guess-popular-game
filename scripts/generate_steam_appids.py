@@ -5,6 +5,7 @@ import time
 import pickle
 import os
 import traceback
+from json import JSONDecodeError
 
 GET_APPLIST_URL = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/'
 GET_APPDETAILS_URL = 'https://store.steampowered.com/api/appdetails'
@@ -44,14 +45,23 @@ def main():
     try:
         for appid in appids[index:]:
             while True:
+                skip = False
                 appdetails_resp = requests.get(GET_APPDETAILS_URL, params={'appids': appid, 'l': 'en_us'})
-                resp_data = appdetails_resp.json()
+                try:
+                    resp_data = appdetails_resp.json()
+                except JSONDecodeError:
+                    print('JSONDecodeError when getting appdetails, skipping.')
+                    skip = True
+                    break
 
                 if not resp_data:
                     print('Rate limited for appdetails! Waiting a minute.')
                     time.sleep(60)
                 else:
                     break
+            
+            if skip:
+                continue
 
             if str(appid) in resp_data and resp_data[str(appid)]['success']:
                 if resp_data[str(appid)]['data']['type'] == 'game' and not resp_data[str(appid)]['data']['release_date']['coming_soon']:
@@ -77,8 +87,9 @@ def main():
         with open(INTERMEDIATE_FILE_PATH, 'wb') as f:
             pickle.dump((appids, games, index, errors), f)
         return
-    except Exception as e:
-        print(f'Failed with {e}:\n{traceback.format_exc(e)}\n\nSAVING INTERMEDIATE FILE.')
+    except Exception:
+        traceback.print_exc()
+        print('\n\nSAVING INTERMEDIATE FILE.')
         with open(INTERMEDIATE_FILE_PATH, 'wb') as f:
             pickle.dump((appids, games, index, errors), f)
         return

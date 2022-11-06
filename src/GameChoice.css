@@ -1,0 +1,10 @@
+.GameChoice img {
+  border-radius: 5px;
+}
+
+.GameName {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  margin-top: 10px;
+  font-weight: 200;
+}

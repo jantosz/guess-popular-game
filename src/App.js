@@ -1,23 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import GameChoice from "./GameChoice";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="Game">
+        <div className="InstructionsText">
+          Which game has more concurrent players on Steam?
+        </div>
+        <GameChoice
+          gameName="Don't Starve"
+          gameBannerUrl="https://cdn.akamai.steamstatic.com/steam/apps/219740/header.jpg"
+        />
+        <div className="Divider">OR</div>
+        <GameChoice
+          gameName="Terraria"
+          gameBannerUrl="https://cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg"
+        />
+      </div>
     </div>
   );
 }
