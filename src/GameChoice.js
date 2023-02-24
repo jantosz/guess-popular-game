@@ -1,11 +1,11 @@
 import React from "react";
 import "./GameChoice.css";
 
-export default function GameChoice(props) {
+export default function GameChoice({ gameBannerUrl, gameName }) {
   return (
     <div className="GameChoice">
-      <img src={props.gameBannerUrl} alt={props.gameName} />
-      <div className="GameName">{props.gameName}</div>
+      <img src={gameBannerUrl} alt={gameName} />
+      <div className="GameName">{gameName}</div>
     </div>
   );
 }
