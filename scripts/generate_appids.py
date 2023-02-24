@@ -113,6 +113,9 @@ def main():
 
         try:
             app_is_game = is_game(appid)
+        except MaxRetriesExceeded:
+            print(f'Max retries exceeded for is_game({appid}) -- skipping')
+            continue
         except:
             traceback.print_exc()
             print('Saving partial results to file.')
@@ -122,6 +125,9 @@ def main():
         if app_is_game:
             try:
                 player_count = concurrent_players(appid)
+            except MaxRetriesExceeded:
+                print(f'Max retries exceeded for concurrent_players({appid}) -- skipping')
+                continue
             except:
                 traceback.print_exc()
                 print('Saving partial results to file.')
