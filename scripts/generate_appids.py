@@ -10,7 +10,7 @@ APPDETAILS_URL = 'https://store.steampowered.com/api/appdetails'
 CURRENTPLAYERS_URL = 'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/'
 
 PARTIAL_PLAYERCOUNTS_PATH = Path('script_data/partial_playercounts.dat')
-FINAL_APPIDS_PATH = Path('data/appids.txt')
+FINAL_APPIDS_PATH = Path('src/appidsList.js')
 
 MAX_RETRIES = 10
 RETRY_SLEEP = 3
@@ -35,8 +35,9 @@ def save_partial_playercounts(index: int, partial_playercounts: dict[int, int]) 
 
 def save_final_appids(games_to_player_counts: dict[int, int]):
     with FINAL_APPIDS_PATH.open('w') as f:
+        f.write('export default ALL_APPIDS = Set([\n')
         for appid in sorted(games_to_player_counts, key=lambda x: -games_to_player_counts[x])[:NUM_APPS_TO_KEEP]:
-            f.write(f'{appid}\n')
+            f.write(f'{appid},\n')
 
 
 def is_game(appid: int) -> bool:
