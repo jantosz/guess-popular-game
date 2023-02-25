@@ -116,6 +116,9 @@ def main():
         except MaxRetriesExceeded:
             print(f'Max retries exceeded for is_game({appid}) -- skipping')
             continue
+        except requests.exceptions.ConnectionError:
+            print(f'ConnectionError when trying is_game({appid}) -- skipping')
+            continue
         except:
             traceback.print_exc()
             print('Saving partial results to file.')
@@ -127,6 +130,9 @@ def main():
                 player_count = concurrent_players(appid)
             except MaxRetriesExceeded:
                 print(f'Max retries exceeded for concurrent_players({appid}) -- skipping')
+                continue
+            except requests.exceptions.ConnectionError:
+                print(f'ConnectionError when trying concurrent_players({appid}) -- skipping')
                 continue
             except:
                 traceback.print_exc()
