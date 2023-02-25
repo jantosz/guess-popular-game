@@ -35,7 +35,7 @@ def save_partial_playercounts(index: int, partial_playercounts: dict[int, int]) 
 
 def save_final_appids(games_to_player_counts: dict[int, int]):
     with FINAL_APPIDS_PATH.open('w') as f:
-        f.write('export default ALL_APPIDS = Set([\n')
+        f.write('export ALL_APPIDS = new Set([\n')
         for appid in sorted(games_to_player_counts, key=lambda x: -games_to_player_counts[x])[:NUM_APPS_TO_KEEP]:
             f.write(f'{appid},\n')
 
