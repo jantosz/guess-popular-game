@@ -55,7 +55,7 @@ def is_game(appid: int) -> bool:
             rate_limit_sleep *= 2
         else:
             if retry_count == MAX_RETRIES:
-                raise MaxRetriesExceeded(f'Checking app {appid}, status code {resp.status_code}')
+                raise MaxRetriesExceeded(f'Checking app {appid}, status code {resp.status_code}', resp.status_code)
             else:
                 retry_count += 1
                 time.sleep(RETRY_SLEEP)
@@ -80,7 +80,7 @@ def concurrent_players(appid: int) -> int:
             rate_limit_sleep *= 2
         else:
             if retry_count == MAX_RETRIES:
-                raise MaxRetriesExceeded(f'Checking players for app {appid}, status code {resp.status_code}')
+                raise MaxRetriesExceeded(f'Checking players for app {appid}, status code {resp.status_code}', resp.status_code)
             else:
                 retry_count += 1
                 time.sleep(RETRY_SLEEP)
@@ -93,7 +93,10 @@ class RateLimitedError(Exception):
 
 
 class MaxRetriesExceeded(Exception):
-    pass
+    def __init__(self, message: str, status_code: int):
+        self.message = message
+        self.status_code = status_code
+        super.__init__(message)
 
 
 def get_app_list() -> list[int]:
@@ -114,8 +117,8 @@ def main():
 
         try:
             app_is_game = is_game(appid)
-        except MaxRetriesExceeded:
-            print(f'Max retries exceeded for is_game({appid}) -- skipping')
+        except MaxRetriesExceeded as e:
+            print(f'Max retries exceeded for is_game({appid}) -- skipping ({e.status_code})')
             continue
         except requests.exceptions.ConnectionError:
             print(f'ConnectionError when trying is_game({appid}) -- skipping')
@@ -129,8 +132,8 @@ def main():
         if app_is_game:
             try:
                 player_count = concurrent_players(appid)
-            except MaxRetriesExceeded:
-                print(f'Max retries exceeded for concurrent_players({appid}) -- skipping')
+            except MaxRetriesExceeded as e:
+                print(f'Max retries exceeded for concurrent_players({appid}) -- skipping ({e.status_code})')
                 continue
             except requests.exceptions.ConnectionError:
                 print(f'ConnectionError when trying concurrent_players({appid}) -- skipping')
