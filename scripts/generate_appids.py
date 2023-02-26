@@ -53,6 +53,8 @@ def is_game(appid: int) -> bool:
             print(f'Rate limited on is_game({appid}). Sleeping for {rate_limit_sleep} seconds.')
             time.sleep(rate_limit_sleep)
             rate_limit_sleep *= 2
+        elif resp.status_code == 404:
+            raise NotFoundError()
         else:
             if retry_count == MAX_RETRIES:
                 raise MaxRetriesExceeded(f'Checking app {appid}, status code {resp.status_code}', resp.status_code)
@@ -99,6 +101,10 @@ class MaxRetriesExceeded(Exception):
         super().__init__(message)
 
 
+class NotFoundError(Exception):
+    pass
+
+
 def get_app_list() -> list[int]:
     applist_json = requests.get(APPLIST_URL).json()
     return [content['appid'] for content in applist_json['applist']['apps']]
@@ -137,6 +143,9 @@ def main():
                 continue
             except requests.exceptions.ConnectionError:
                 print(f'ConnectionError when trying concurrent_players({appid}) -- skipping')
+                continue
+            except NotFoundError:
+                print(f'404 when trying concurrent_players({appid}) -- skipping')
                 continue
             except:
                 traceback.print_exc()
