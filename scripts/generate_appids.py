@@ -2,6 +2,7 @@ import requests
 import time
 import pickle
 import traceback
+import json
 
 from pathlib import Path
 
@@ -129,6 +130,9 @@ def main():
         except requests.exceptions.ConnectionError:
             print(f'ConnectionError when trying is_game({appid}) -- skipping')
             continue
+        except json.decoder.JSONDecodeError:
+            print(f'JSONDecodeError when trying is_game({appid}) -- skipping')
+            continue
         except:
             traceback.print_exc()
             print('Saving partial results to file.')
@@ -146,6 +150,9 @@ def main():
                 continue
             except NotFoundError:
                 print(f'404 when trying concurrent_players({appid}) -- skipping')
+                continue
+            except json.decoder.JSONDecodeError:
+                print(f'JSONDecodeError when trying concurrent_players({appid}) -- skipping')
                 continue
             except:
                 traceback.print_exc()
