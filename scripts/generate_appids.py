@@ -53,8 +53,6 @@ def is_game(appid: int) -> bool:
             print(f'Rate limited on is_game({appid}). Sleeping for {rate_limit_sleep} seconds.')
             time.sleep(rate_limit_sleep)
             rate_limit_sleep *= 2
-        elif resp.status_code == 404:
-            raise NotFoundError()
         else:
             if retry_count == MAX_RETRIES:
                 raise MaxRetriesExceeded(f'Checking app {appid}, status code {resp.status_code}', resp.status_code)
@@ -80,6 +78,8 @@ def concurrent_players(appid: int) -> int:
             print(f'Rate limited on concurrent_players({appid}). Sleeping for {rate_limit_sleep} seconds.')
             time.sleep(rate_limit_sleep)
             rate_limit_sleep *= 2
+        elif resp.status_code == 404:
+            raise NotFoundError()
         else:
             if retry_count == MAX_RETRIES:
                 raise MaxRetriesExceeded(f'Checking players for app {appid}, status code {resp.status_code}', resp.status_code)
