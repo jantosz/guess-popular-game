@@ -17,7 +17,7 @@ MAX_RETRIES = 10
 RETRY_SLEEP = 3
 RATE_LIMIT_SLEEP = 5
 
-NUM_APPS_TO_KEEP = 1000
+NUM_APPS_TO_KEEP = 500
 
 
 def load_partial_playercounts() -> tuple[int, dict[int, int]]: # returns index, partial_playercounts
