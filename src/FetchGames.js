@@ -19,23 +19,39 @@ export default function fetchNewGame(
 
   remainingGamesRef.current.delete(chosenApp);
 
+  var requestCancelled = false;
+
   fetch(`${APPDETAILS_URL}?appid=${chosenApp}`).then((resp) => {
     resp.json().then((response) => {
       const respData = response[chosenApp];
       if (response[chosenApp].success) {
-        setGame({
-          name: respData.data.name,
-          banner: respData.data.header_image,
-        });
-        appdetailsCallback();
+        if (!requestCancelled) {
+          setGame({
+            name: respData.data.name,
+            banner: respData.data.header_image,
+          });
+          appdetailsCallback();
+        }
       }
     });
   });
 
   fetch(`${CURRENTPLAYERS_URL}?appid=${chosenApp}`).then((resp) => {
     resp.json().then((data) => {
-      setPlayerCount(data.response.player_count);
-      currentplayersCallback();
+      if (resp.ok) {
+        setPlayerCount(data.response.player_count);
+        currentplayersCallback();
+      } else {
+        requestCancelled = true;
+        setGame({});
+        fetchNewGame(
+          remainingGamesRef,
+          setGame,
+          setPlayerCount,
+          appdetailsCallback,
+          currentplayersCallback
+        );
+      }
     });
   });
 }
