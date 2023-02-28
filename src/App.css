@@ -1,23 +1,6 @@
-body {
-  background-color: #171a21;
-  margin: auto;
-  text-align: center;
-  justify-content: center;
-  color: rgb(231, 231, 231);
-}
-
-.InstructionsText {
+.instructions-text {
   font-family: Helvetica, Arial, sans-serif;
   font-weight: bolder;
   font-size: 20pt;
   margin: 5px 5px 50px;
-}
-
-.Divider {
-  margin: 10px 0px 10px;
-}
-
-.Game {
-  display: block;
-  margin-top: 5rem;
 }

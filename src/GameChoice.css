@@ -1,10 +1,83 @@
-.GameChoice img {
-  border-radius: 5px;
+.GameChoice {
+  display: grid;
 }
 
-.GameName {
-  font-family: Helvetica, Arial, sans-serif;
+.game-choice-button {
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 2;
+  border-color: rgba(20, 20, 20, 0);
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.game-choice-button:hover {
+  background-color: rgba(100, 100, 100, 0.3);
+  border-width: 2px;
+  border-color: rgb(20, 20, 20);
+  border-style: solid;
+  transition: background-color 0.2s, border-color 0.2s;
+  transition-timing-function: ease-out;
+}
+
+.game-choice-visible-items {
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 1;
+  display: grid;
+}
+
+.GameChoice img {
+  border-radius: 5px;
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.game-name {
+  font-family: Helvetica;
   font-size: 20px;
-  margin-top: 10px;
+  margin-top: 5px;
   font-weight: 200;
+  margin-bottom: 10px;
+}
+
+.player-count-overlay {
+  grid-column: 1;
+  grid-row: 1;
+  background: rgba(20, 20, 20, 0.9);
+  z-index: 3;
+  align-items: center;
+  display: grid;
+  border-radius: 4px;
+}
+
+.player-count-text {
+  margin-left: auto;
+  margin-right: auto;
+  font-family: Helvetica;
+  font-weight: bold;
+  font-size: 50pt;
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.correct-text {
+  position: relative;
+  top: 70px;
+  grid-row: 1;
+  grid-column: 1;
+  font-family: Helvetica;
+  font-weight: bold;
+  font-size: x-large;
+  color: rgb(83, 172, 105);
+}
+
+.incorrect-text {
+  position: relative;
+  top: 70px;
+  grid-row: 1;
+  grid-column: 1;
+  font-family: Helvetica;
+  font-weight: bold;
+  font-size: x-large;
+  color: rgb(176, 83, 83);
 }

@@ -1,0 +1,57 @@
+.Game {
+  width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.divider {
+  margin-bottom: 20px;
+  display: grid;
+  align-items: center;
+}
+
+.divider-line {
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 1;
+}
+
+.divider-line-mask {
+  height: 3px;
+  background-color: var(--main-bg-color);
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 2;
+  width: 60px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.divider-text {
+  font-family: "Roboto";
+  font-size: xx-large;
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 3;
+}
+
+.scores {
+  margin-top: 50px;
+  display: grid;
+  font-family: Helvetica;
+  font-weight: bold;
+  font-size: 25pt;
+}
+
+.current-score {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.best-score {
+  grid-row: 1;
+  grid-column: 2;
+}
