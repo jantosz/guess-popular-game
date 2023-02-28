@@ -137,6 +137,7 @@ def main():
             traceback.print_exc()
             print('Saving partial results to file.')
             save_partial_playercounts(cur_index, games_to_player_counts)
+            save_final_appids(games_to_player_counts)
             return
 
         if app_is_game:
@@ -158,6 +159,7 @@ def main():
                 traceback.print_exc()
                 print('Saving partial results to file.')
                 save_partial_playercounts(cur_index, games_to_player_counts)
+                save_final_appids(games_to_player_counts)
                 return
             
             games_to_player_counts[appid] = player_count
