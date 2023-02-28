@@ -22,36 +22,50 @@ export default function fetchNewGame(
   var requestCancelled = false;
 
   fetch(`${APPDETAILS_URL}?appid=${chosenApp}`).then((resp) => {
-    resp.json().then((response) => {
-      const respData = response[chosenApp];
-      if (response[chosenApp].success) {
-        if (!requestCancelled) {
-          setGame({
-            name: respData.data.name,
-            banner: respData.data.header_image,
-          });
-          appdetailsCallback();
+    if (resp.ok) {
+      resp.json().then((response) => {
+        const respData = response[chosenApp];
+        if (response[chosenApp].success) {
+          if (!requestCancelled) {
+            setGame({
+              name: respData.data.name,
+              banner: respData.data.header_image,
+            });
+            appdetailsCallback();
+          }
         }
-      }
-    });
+      });
+    } else {
+      requestCancelled = true;
+      setPlayerCount(-1);
+      fetchNewGame(
+        remainingGamesRef,
+        setGame,
+        setPlayerCount,
+        appdetailsCallback,
+        currentplayersCallback
+      );
+    }
   });
 
   fetch(`${CURRENTPLAYERS_URL}?appid=${chosenApp}`).then((resp) => {
-    resp.json().then((data) => {
-      if (resp.ok) {
-        setPlayerCount(data.response.player_count);
-        currentplayersCallback();
-      } else {
-        requestCancelled = true;
-        setGame({});
-        fetchNewGame(
-          remainingGamesRef,
-          setGame,
-          setPlayerCount,
-          appdetailsCallback,
-          currentplayersCallback
-        );
-      }
-    });
+    if (resp.ok) {
+      resp.json().then((data) => {
+        if (!requestCancelled) {
+          setPlayerCount(data.response.player_count);
+          currentplayersCallback();
+        }
+      });
+    } else {
+      requestCancelled = true;
+      setGame({});
+      fetchNewGame(
+        remainingGamesRef,
+        setGame,
+        setPlayerCount,
+        appdetailsCallback,
+        currentplayersCallback
+      );
+    }
   });
 }

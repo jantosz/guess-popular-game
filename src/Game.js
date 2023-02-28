@@ -62,6 +62,19 @@ export default function Game() {
       checkToRenderNewGames,
       checkToRenderNewGames
     );
+
+    const handleMouseDown = () => {
+      if (!clickedOntoNextRound.current) {
+        clickedOntoNextRound.current = true;
+        checkToRenderNewGames();
+      }
+    };
+
+    window.addEventListener("mousedown", handleMouseDown);
+
+    return () => {
+      window.removeEventListener("mousedown", handleMouseDown);
+    };
   }, []); // only on initial render
 
   const checkToRenderNewGames = () => {
@@ -75,9 +88,6 @@ export default function Game() {
       if (!lastChoiceWasCorrect.current) {
         score.current = 0;
       }
-
-      clickedOntoNextRound.current = false;
-      document.removeEventListener("mousedown", nextRoundClickCallback);
       setGameData({
         name1: game1Ref.current.name,
         name2: game2Ref.current.name,
@@ -92,15 +102,14 @@ export default function Game() {
       game2Ref.current = {};
       playerCount1Ref.current = -1;
       playerCount2Ref.current = -1;
+
+      return true;
+    } else {
+      return false;
     }
   };
 
-  const nextRoundClickCallback = () => {
-    clickedOntoNextRound.current = true;
-    checkToRenderNewGames();
-  };
-
-  const startLoadingNewGames = () => {
+  const startLoadingNewGames = (clickCallback) => {
     if (
       (gameChosen === 1 && gameData.players1 < gameData.players2) ||
       (gameChosen === 2 && gameData.players2 < gameData.players1)
@@ -146,7 +155,7 @@ export default function Game() {
 
     setGameChosen(1);
     startLoadingNewGames();
-    document.addEventListener("mousedown", nextRoundClickCallback);
+    clickedOntoNextRound.current = false;
   };
 
   const game2ButtonCallback = () => {
@@ -163,7 +172,7 @@ export default function Game() {
 
     setGameChosen(2);
     startLoadingNewGames();
-    document.addEventListener("mousedown", nextRoundClickCallback);
+    clickedOntoNextRound.current = false;
   };
 
   return (
